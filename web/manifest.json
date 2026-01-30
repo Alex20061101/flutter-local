@@ -1,6 +1,6 @@
 {
-    "name": "yolo_web_demo",
-    "short_name": "yolo_web_demo",
+    "name": "flutter_local",
+    "short_name": "flutter_local",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

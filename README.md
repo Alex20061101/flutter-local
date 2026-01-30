@@ -1,16 +1,33 @@
-# flutter_local
+# Flutter YOLOv8 Local Detection
 
-A new Flutter project.
+A real-time object detection application built with Flutter and the Ultralytics YOLOv8 TFLite engine. This project demonstrates how to run computer vision models locally on-device with high-performance camera streaming.
 
-## Getting Started
+## 🚀 Getting Started
 
-This project is a starting point for a Flutter application.
+### 1. Prerequisites
+* **Flutter SDK:** Latest stable version.
+* **Android:** Physical device or Emulator with Camera support (Pixel 7/8 recommended).
+* **Model:** YOLOv8n TFLite format.
 
-A few resources to get you started if this is your first Flutter project:
+### 2. Native Asset Setup (Critical Step)
+Unlike standard Flutter assets, the native YOLO engine requires direct access to the model files to avoid memory latency. 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**You must place your files in the following directory:**
+`android/app/src/main/assets/`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Expected files:
+* `yolov8n.tflite` (The trained model)
+* `metadata.yaml` (The class labels)
+
+### 3. Installation & Running
+If you have moved files or changed the directory structure, always perform a clean build:
+
+```bash
+# Clear old build artifacts
+flutter clean
+
+# Fetch dependencies
+flutter pub get
+
+# Run on your connected device/emulator
+flutter run

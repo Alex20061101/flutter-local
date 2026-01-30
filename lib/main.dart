@@ -1,105 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Request camera permission
   await Permission.camera.request();
-  
-  runApp(const MyApp());
+
+  runApp(const MaterialApp(
+    home: CameraApp(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CameraApp extends StatefulWidget {
+  const CameraApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'YOLO Object Detector',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const YOLODetectionScreen(),
-    );
-  }
+  State<CameraApp> createState() => _CameraAppState();
 }
 
-class YOLODetectionScreen extends StatefulWidget {
-  const YOLODetectionScreen({super.key});
-
-  @override
-  State<YOLODetectionScreen> createState() => _YOLODetectionScreenState();
-}
-
-class _YOLODetectionScreenState extends State<YOLODetectionScreen> {
-  int detectedObjects = 0;
-  String lastDetection = 'Waiting...';
-
+class _CameraAppState extends State<CameraApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('YOLO Real-Time Detection'),
-        backgroundColor: Colors.blue,
+        title: const Text("YOLOv8 Detection"),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
-      body: Stack(
-        children: [
-          // YOLO Camera View with object detection
-          YOLOView(
-            modelPath: 'assets/models/yolov8n.tflite',
-            task: YOLOTask.detect,
-            onResult: (results) {
-              setState(() {
-                detectedObjects = results.length;
-                if (results.isNotEmpty) {
-                  lastDetection = results
-                      .map((r) => '${r.className}: ${(r.confidence * 100).toStringAsFixed(0)}%')
-                      .join(', ');
-                } else {
-                  lastDetection = 'No objects detected';
-                }
-              });
-            },
-          ),
+      body: FutureBuilder<PermissionStatus>(
+        future: Permission.camera.status,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
           
-          // Detection info overlay
-          Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Objects detected: $detectedObjects',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    lastDetection,
-                    style: const TextStyle(
-                      color: Colors.greenAccent,
-                      fontSize: 14,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          if (snapshot.data?.isGranted != true) {
+            return const Center(child: Text("Camera permission required"));
+          }
+
+          return YOLOView(
+            // Since we put these in android/app/src/main/assets, 
+            // the native side often expects just the filename.
+            modelPath: 'yolov8n.tflite',
+            task: YOLOTask.detect,
+            useGpu: false,
+            onResult: (results) {
+              if (results.isNotEmpty) {
+                final firstResult = results.first;
+                debugPrint('Detected ${results.length} objects. First class index: ${firstResult.classIndex}');
+              }
+            },
+          );
+        },
       ),
     );
   }

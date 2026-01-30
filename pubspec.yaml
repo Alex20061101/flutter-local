@@ -30,7 +30,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
-  # Add YOLO model assets
   assets:
-    - assets/models/
+    - assets/models/yolov8n.tflite
+    - assets/models/metadata.yaml

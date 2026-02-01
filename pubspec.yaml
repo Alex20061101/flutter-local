@@ -31,6 +31,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/models/yolov8n.tflite
-    - assets/models/metadata.yaml
-    - android/app/src/main/assets/yolov8n_quant.tflite
+    - android/app/src/main/assets/yolov8n_160.tflite
+    - android/app/src/main/assets/yolov8n_192.tflite
+    - android/app/src/main/assets/yolov8n_256.tflite
+    - android/app/src/main/assets/yolov8n_320.tflite
+    - android/app/src/main/assets/yolov8n_416.tflite
+    - android/app/src/main/assets/yolov8n_640.tflite

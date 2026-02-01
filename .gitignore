@@ -43,3 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Python / Local Utilities
+__pycache__/
+check_models.py
+.venv/
+venv/
+
+# Deprecated / Unused Assets
+# We now use android/app/src/main/assets for native model loading
+assets/models/

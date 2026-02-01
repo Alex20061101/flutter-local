@@ -19,6 +19,11 @@ android {
     // 2. FIXED NDK: Using the version specifically requested by the YOLO plugin
     ndkVersion = "28.2.13676358"
 
+    aaptOptions {
+        noCompress("tflite")
+        noCompress("yaml")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -42,6 +47,7 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 }

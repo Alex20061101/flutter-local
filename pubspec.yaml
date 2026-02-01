@@ -33,3 +33,4 @@ flutter:
   assets:
     - assets/models/yolov8n.tflite
     - assets/models/metadata.yaml
+    - android/app/src/main/assets/yolov8n_quant.tflite

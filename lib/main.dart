@@ -44,9 +44,9 @@ class _CameraAppState extends State<CameraApp> {
           return YOLOView(
             // Since we put these in android/app/src/main/assets, 
             // the native side often expects just the filename.
-            modelPath: 'yolov8n.tflite',
+            modelPath: 'yolov8n_quant.tflite',
             task: YOLOTask.detect,
-            useGpu: false,
+            useGpu: true,
             onResult: (results) {
               if (results.isNotEmpty) {
                 final firstResult = results.first;
